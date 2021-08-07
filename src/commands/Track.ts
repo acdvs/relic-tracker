@@ -5,9 +5,10 @@ import { Command, PossibleUndef } from '../types';
 import { DATABASE_ERROR, INVALID_RELIC } from '../util/sharedMessages';
 import { TIER_COUNTS } from '../util/relics';
 
-export class FoundRelic extends Command {
-  name = 'foundrelic';
-  description = 'Stop tracking a relic you are no longer looking for.';
+export class Track extends Command {
+  name = 'track';
+  description =
+    'Track a relic you are looking for. You will be pinged if it is found.';
   options = [
     {
       type: 'INTEGER' as ApplicationCommandOptionType,
@@ -40,22 +41,22 @@ export class FoundRelic extends Command {
 
     const collection: RelicCollection = await this.bot.db.getRelics(member.id);
 
-    if (!collection.hasRelic(tierId, relicId)) {
+    if (collection.hasRelic(tierId, relicId)) {
       interaction.reply({
-        content: `You are not tracking relic T${tierId}-${relicId} yet.`,
+        content: `You are already tracking relic T${tierId}-${relicId}.`,
         ephemeral: true,
       });
       return;
     }
 
-    const result: PossibleUndef<UpdateResult> = await collection.removeRelic(
+    const result: PossibleUndef<UpdateResult> = await collection.addRelic(
       tierId,
       relicId
     );
 
     interaction.reply({
       content: result?.acknowledged
-        ? `You are no longer tracking relic T${tierId}-${relicId}.`
+        ? `You are now tracking relic T${tierId}-${relicId}.`
         : DATABASE_ERROR,
       ephemeral: true,
     });

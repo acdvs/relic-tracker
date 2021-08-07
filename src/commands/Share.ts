@@ -9,8 +9,8 @@ import { INVALID_RELIC } from '../util/sharedMessages';
 import { RELIC_NAMES, TIER_COUNTS } from '../util/relics';
 import baseEmbedProps from '../util/baseEmbedProps';
 
-export class ShareRelic extends Command {
-  name = 'sharerelic';
+export class Share extends Command {
+  name = 'share';
   description =
     'Provide the sharecode for a relic you found that others might need.';
   options = [
