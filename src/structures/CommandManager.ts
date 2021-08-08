@@ -1,47 +1,49 @@
 import { promises as fs } from 'fs';
 import { resolve, parse } from 'path';
-import { Collection, CommandInteraction } from 'discord.js';
+import { Collection, CommandInteraction, Guild } from 'discord.js';
 import { Command, PossibleUndef } from '../types';
 import { Bot } from '.';
 
 export default class CommandManager extends Collection<string, Command> {
+  private readonly _path = resolve(__dirname, '..', 'commands');
   private _bot: Bot;
-  private _path: string;
 
-  constructor(bot: Bot, path: string) {
+  constructor(bot: Bot) {
     super();
     this._bot = bot;
-    this._path = path;
   }
 
   async load(): Promise<void> {
-    fs.readdir(this._path)
-      .then(async (files) => {
-        for (const file of files) {
-          const command = await this._import(file);
+    let testGuild: PossibleUndef<Guild>;
 
-          if (!command) {
-            continue;
-          }
+    if (process.env.MODE === 'development') {
+      testGuild = await this._bot.guilds.fetch(
+        process.env.TEST_SERVER_ID as string
+      );
+    }
 
-          this.set(command.name, command);
+    const commands = [];
+    const files = await fs.readdir(this._path);
 
-          if (process.env.MODE === 'development') {
-            const testGuild = await this._bot.guilds.fetch(
-              process.env.TEST_SERVER_ID as string
-            );
-            await testGuild.commands.create(command);
-          } else {
-            await this._bot.application?.commands.create(command);
-          }
+    for (const file of files) {
+      commands.push(await this._import(file));
+    }
 
-          console.log(`Loaded command /${command.name}`);
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-        process.exit(1);
-      });
+    for (const command of commands) {
+      if (!command) {
+        continue;
+      }
+
+      this.set(command.name, command);
+
+      if (testGuild) {
+        await testGuild.commands.create(command);
+      } else {
+        await this._bot.application?.commands.create(command);
+      }
+
+      console.log(`Loaded command /${command.name}`);
+    }
   }
 
   run(interaction: CommandInteraction): void {

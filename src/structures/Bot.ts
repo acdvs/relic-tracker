@@ -4,11 +4,8 @@ import baseEmbedProps from '../util/baseEmbedProps';
 import { CommandManager, Database } from '.';
 
 export default class Bot extends Client {
-  db = new Database(this);
-  private _commands = new CommandManager(
-    this,
-    path.resolve(__dirname, '..', 'commands')
-  );
+  private _commands = new CommandManager(this);
+  public db = new Database(this);
 
   start(token: string): void {
     this.login(token);
