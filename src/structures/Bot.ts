@@ -1,5 +1,5 @@
 import path from 'path';
-import { Client, Interaction, MessageEmbed } from 'discord.js';
+import { Client, GuildMember, Interaction, MessageEmbed } from 'discord.js';
 import baseEmbedProps from '../util/baseEmbedProps';
 import { CommandManager, Database } from '.';
 
@@ -33,7 +33,14 @@ export default class Bot extends Client {
   }
 
   private _onInteractionCreate(interaction: Interaction): void {
-    if (!interaction.inGuild() || !interaction.isCommand()) {
+    const member = interaction.member as GuildMember;
+
+    if (
+      !interaction.inGuild() ||
+      !interaction.isCommand() ||
+      !member ||
+      !('id' in member)
+    ) {
       return;
     }
 

@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, CommandInteraction } from 'discord.js';
+import { ApplicationCommandOptionType, CommandInteraction, GuildMember } from 'discord.js';
 import { UpdateResult } from 'mongodb';
 import { RelicCollection } from '../structures';
 import { Command, PossibleUndef } from '../types';
@@ -27,18 +27,14 @@ export class Untrack extends Command {
     const tierId = interaction.options.getInteger('tier')!;
     const relicId = interaction.options.getInteger('number')!;
     const amountInTier = TIER_COUNTS[tierId - 1];
-    const member = interaction.member;
-
-    if (!member || !('id' in member)) {
-      return;
-    }
+    const author = interaction.member as GuildMember;
 
     if (!amountInTier || relicId < 1 || relicId > amountInTier) {
       interaction.reply({ content: INVALID_RELIC, ephemeral: true });
       return;
     }
 
-    const collection: RelicCollection = await this.bot.db.getRelics(member.id);
+    const collection: RelicCollection = await this.bot.db.getRelics(author.id);
 
     if (!collection.hasRelic(tierId, relicId)) {
       interaction.reply({

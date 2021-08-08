@@ -39,11 +39,6 @@ export class Share extends Command {
     const relicId = interaction.options.getInteger('number')!;
     const sharecode = interaction.options.getString('sharecode')!;
     const amountInTier = TIER_COUNTS[tierId - 1];
-    const author = interaction.member;
-
-    if (!author || !('id' in author)) {
-      return;
-    }
 
     if (!amountInTier || relicId < 1 || relicId > amountInTier) {
       interaction.reply({ content: INVALID_RELIC, ephemeral: true });
