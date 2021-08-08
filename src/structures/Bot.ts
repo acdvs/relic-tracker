@@ -10,9 +10,9 @@ export default class Bot extends Client {
     path.resolve(__dirname, '..', 'commands')
   );
 
-  async start(token: string): Promise<void> {
-    await this.login(token);
-    await this.db.connect();
+  start(token: string): void {
+    this.login(token);
+    this.db.connect();
 
     this.on('ready', this._onReady);
     this.on('interactionCreate', this._onInteractionCreate);
@@ -20,7 +20,8 @@ export default class Bot extends Client {
 
   private async _onReady(): Promise<void> {
     if (!this.user) {
-      return;
+      console.error('Client user does not exist');
+      process.exit(1);
     }
 
     if (!this.application?.owner) {
