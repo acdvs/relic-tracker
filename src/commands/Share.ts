@@ -1,11 +1,8 @@
-import {
-  ApplicationCommandOptionType,
-  CommandInteraction,
-  Snowflake,
-} from 'discord.js';
+import { ApplicationCommandOptionType, CommandInteraction } from 'discord.js';
 import { Command } from '../types';
 import { INVALID_RELIC } from '../util/sharedMessages';
 import { RELIC_NAMES, TIER_COUNTS } from '../util/relics';
+import { RelicCollection } from '../structures';
 
 export class Share extends Command {
   name = 'share';
@@ -43,10 +40,8 @@ export class Share extends Command {
       return;
     }
 
-    const memberIds: Snowflake[] = await this.bot.db.getCollectionsWithRelic(
-      tierId,
-      relicId
-    );
+    const collections: RelicCollection[] =
+      await this.bot.db.getCollectionsWithRelic(tierId, relicId);
 
     const relicName = RELIC_NAMES[tierId - 1][relicId - 1];
     // eslint-disable-next-line prettier/prettier
@@ -56,10 +51,10 @@ export class Share extends Command {
       sharecode
     ];
 
-    if (memberIds?.length > 0) {
+    if (collections?.length > 0) {
       message = message.concat([
         '```**Relic tracked by**',
-        memberIds.map((x) => `<@!${x}>`).join(' '),
+        collections.map((x) => `<@!${x.memberId}>`).join(' '),
       ]);
     } else {
       message.push('```');
@@ -68,7 +63,7 @@ export class Share extends Command {
     interaction.reply({
       content: message.join('\n'),
       allowedMentions: {
-        users: memberIds,
+        users: collections.map((x) => x.memberId as string),
       },
     });
   }

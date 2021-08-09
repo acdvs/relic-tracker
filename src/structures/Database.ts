@@ -39,22 +39,19 @@ export default class Database {
   async getCollectionsWithRelic(
     tierId: number,
     relicId: number
-  ): Promise<Snowflake[]> {
+  ): Promise<RelicCollection[]> {
     const result = await this._collection!.find(
       {
         [`relics.${tierId - 1}`]: {
           $elemMatch: { $eq: relicId },
         },
       },
-      {
-        projection: {
-          _id: 0,
-          memberId: 1,
-        },
-      }
+      { projection: { _id: 0 } }
     );
 
-    return result.map((x) => x.memberId).toArray();
+    return result
+      .map((x) => new RelicCollection(x.relics, x.memberId, this.bot))
+      .toArray();
   }
 
   async setCollection(collection: RelicCollection): Promise<UpdateResult> {
