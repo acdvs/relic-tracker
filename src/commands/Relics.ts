@@ -11,9 +11,7 @@ export class Relics extends Command {
     const collection: RelicCollection = await this.bot.db.getRelics(author.id);
 
     interaction.reply({
-      content:
-        collection.getFormattedList('Your tracked relics') ||
-        'You are not tracking any relics yet.',
+      embeds: [collection.generateEmbed('Your tracked relics')],
       ephemeral: true,
     });
   }

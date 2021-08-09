@@ -1,7 +1,8 @@
 import { UpdateResult } from 'mongodb';
-import { Snowflake } from 'discord.js';
+import { MessageEmbed, Snowflake } from 'discord.js';
 import { PossibleUndef, RawCollectionData } from '../types';
 import { Bot, RelicTier } from '.';
+import baseEmbedProps from '../util/baseEmbedProps';
 
 export default class RelicCollection {
   private static readonly MAX_TIERS = 3;
@@ -63,24 +64,36 @@ export default class RelicCollection {
     return this.tiers[tierId - 1];
   }
 
-  getFormattedList(heading?: string): PossibleUndef<string> {
+  generateEmbed(title: string): MessageEmbed {
+    const embed = new MessageEmbed({
+      ...baseEmbedProps,
+    });
+
     if (this.isEmpty()) {
-      return;
+      embed.setDescription('You are not tracking any relics yet.');
+      return embed;
     }
 
-    const lines = heading ? [`**${heading}**`] : [];
+    embed.setTitle(title);
+    const descriptionLines: string[] = [];
 
     for (const tier of this.tiers) {
       if (!tier.isEmpty()) {
-        lines.push(`**Tier ${tier.id}:** \`${tier.getFormattedList()}\``);
+        descriptionLines.push(
+          `**Tier ${tier.id}:** ${tier.getFormattedList({
+            separator: ' ',
+            code: true,
+          })}`
+        );
       }
     }
 
-    return lines.join('\n');
+    embed.setDescription(descriptionLines.join('\n'));
+    return embed;
   }
 
   isEmpty(): boolean {
-    return this.tiers.every((tier) => tier.relics.length === 0);
+    return this.tiers.every((tier) => tier.isEmpty());
   }
 
   serialize(): RawCollectionData {

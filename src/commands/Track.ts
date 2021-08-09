@@ -29,13 +29,13 @@ export class Track extends Command {
   ];
 
   async execute(interaction: CommandInteraction): Promise<void> {
-    const tierId = interaction.options.getInteger('tier')!;
-    const relicId = interaction.options.getInteger('number')!;
+    const tierId = interaction.options.getInteger('tier') as number;
+    const relicId = interaction.options.getInteger('number') as number;
     const amountInTier = TIER_COUNTS[tierId - 1];
     const author = interaction.member as GuildMember;
 
     if (!amountInTier || relicId < 1 || relicId > amountInTier) {
-      interaction.reply({ content: INVALID_RELIC, ephemeral: true });
+      interaction.reply({ embeds: [INVALID_RELIC], ephemeral: true });
       return;
     }
 
@@ -43,7 +43,11 @@ export class Track extends Command {
 
     if (collection.hasRelic(tierId, relicId)) {
       interaction.reply({
-        content: `You are already tracking relic T${tierId}-${relicId}.`,
+        embeds: [
+          collection.generateEmbed(
+            `You are already tracking relic T${tierId}-${relicId}.`
+          ),
+        ],
         ephemeral: true,
       });
       return;
@@ -54,11 +58,18 @@ export class Track extends Command {
       relicId
     );
 
-    interaction.reply({
-      content: result?.acknowledged
-        ? `You are now tracking relic T${tierId}-${relicId}.`
-        : DATABASE_ERROR,
-      ephemeral: true,
-    });
+    if (result?.acknowledged) {
+      interaction.reply({
+        embeds: [
+          collection.generateEmbed(`Tracking relic T${tierId}-${relicId}`),
+        ],
+        ephemeral: true,
+      });
+    } else {
+      interaction.reply({
+        content: DATABASE_ERROR,
+        ephemeral: true,
+      });
+    }
   }
 }

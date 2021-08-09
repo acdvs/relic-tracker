@@ -1,13 +1,11 @@
 import {
   ApplicationCommandOptionType,
   CommandInteraction,
-  MessageEmbed,
   Snowflake,
 } from 'discord.js';
 import { Command } from '../types';
 import { INVALID_RELIC } from '../util/sharedMessages';
 import { RELIC_NAMES, TIER_COUNTS } from '../util/relics';
-import baseEmbedProps from '../util/baseEmbedProps';
 
 export class Share extends Command {
   name = 'share';
@@ -35,13 +33,13 @@ export class Share extends Command {
   ];
 
   async execute(interaction: CommandInteraction): Promise<void> {
-    const tierId = interaction.options.getInteger('tier')!;
-    const relicId = interaction.options.getInteger('number')!;
-    const sharecode = interaction.options.getString('sharecode')!;
+    const tierId = interaction.options.getInteger('tier') as number;
+    const relicId = interaction.options.getInteger('number') as number;
+    const sharecode = interaction.options.getString('sharecode') as string;
     const amountInTier = TIER_COUNTS[tierId - 1];
 
     if (!amountInTier || relicId < 1 || relicId > amountInTier) {
-      interaction.reply({ content: INVALID_RELIC, ephemeral: true });
+      interaction.reply({ embeds: [INVALID_RELIC], ephemeral: true });
       return;
     }
 
@@ -51,26 +49,24 @@ export class Share extends Command {
     );
 
     const relicName = RELIC_NAMES[tierId - 1][relicId - 1];
-    const embed = new MessageEmbed({
-      ...baseEmbedProps,
-      title: `T${tierId}-${relicId}, ${relicName}`,
-      fields: [
-        {
-          name: 'Sharecode',
-          value: sharecode,
-        },
-      ],
-    });
+    // eslint-disable-next-line prettier/prettier
+    let message = [
+      `**T${tierId}-${relicId}, ${relicName}**`,
+      '```',
+      sharecode
+    ];
 
     if (memberIds?.length > 0) {
-      embed.addFields({
-        name: 'Relic tracked by',
-        value: memberIds.map((x) => `<@!${x}>`).join(' '),
-      });
+      message = message.concat([
+        '```**Relic tracked by**',
+        memberIds.map((x) => `<@!${x}>`).join(' '),
+      ]);
+    } else {
+      message.push('```');
     }
 
     interaction.reply({
-      embeds: [embed],
+      content: message.join('\n'),
       allowedMentions: {
         users: memberIds,
       },

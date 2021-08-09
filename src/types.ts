@@ -14,3 +14,8 @@ export type PossibleUndef<T> = T | undefined;
 
 export type RawTierData = number[];
 export type RawCollectionData = RawTierData[];
+
+export type TierFormattedListOptions = {
+  separator: string;
+  code: boolean;
+};

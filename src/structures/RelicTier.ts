@@ -1,4 +1,4 @@
-import { PossibleUndef, RawTierData } from '../types';
+import { RawTierData, TierFormattedListOptions } from '../types';
 import { Relic, RelicCollection } from '.';
 
 export default class RelicTier {
@@ -29,12 +29,17 @@ export default class RelicTier {
     return this.relics.length === 0;
   }
 
-  getFormattedList(): PossibleUndef<string> {
-    if (this.relics.length === 0) {
-      return;
+  getFormattedList(opts: TierFormattedListOptions): string {
+    if (this.isEmpty()) {
+      return '';
     }
 
-    return this.relics.map((r) => `T${r.tier.id}-${r.id}`).join(', ');
+    return this.relics
+      .map((r) => {
+        const relicStr = `T${r.tier.id}-${r.id}`;
+        return opts.code ? `\`${relicStr}\`` : relicStr;
+      })
+      .join(opts.separator);
   }
 
   serialize(): RawTierData {
