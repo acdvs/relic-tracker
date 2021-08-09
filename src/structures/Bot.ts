@@ -1,4 +1,3 @@
-import path from 'path';
 import { Client, GuildMember, Interaction, MessageEmbed } from 'discord.js';
 import baseEmbedProps from '../util/baseEmbedProps';
 import { CommandManager, Database } from '.';

@@ -1,4 +1,8 @@
-import { ApplicationCommandOptionType, CommandInteraction, GuildMember } from 'discord.js';
+import {
+  ApplicationCommandOptionType,
+  CommandInteraction,
+  GuildMember,
+} from 'discord.js';
 import { UpdateResult } from 'mongodb';
 import { RelicCollection } from '../structures';
 import { Command, PossibleUndef } from '../types';
