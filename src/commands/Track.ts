@@ -7,7 +7,7 @@ import { UpdateResult } from 'mongodb';
 import { RelicCollection } from '../structures';
 import { Command, PossibleUndef } from '../types';
 import { DATABASE_ERROR, INVALID_RELIC } from '../util/sharedMessages';
-import { TIER_COUNTS } from '../util/relics';
+import { getTierMetadata } from '../util/relics';
 
 export class Track extends Command {
   name = 'track';
@@ -31,7 +31,7 @@ export class Track extends Command {
   async execute(interaction: CommandInteraction): Promise<void> {
     const tierId = interaction.options.getInteger('tier') as number;
     const relicId = interaction.options.getInteger('number') as number;
-    const amountInTier = TIER_COUNTS[tierId - 1];
+    const amountInTier = getTierMetadata(tierId).length;
     const author = interaction.member as GuildMember;
 
     if (!amountInTier || relicId < 1 || relicId > amountInTier) {

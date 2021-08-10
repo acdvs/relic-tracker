@@ -19,3 +19,8 @@ export type TierFormattedListOptions = {
   separator: string;
   code: boolean;
 };
+
+export type RelicMetadata = {
+  name: string;
+  image: string;
+};
