@@ -53,9 +53,8 @@ export default class CommandManager extends Collection<string, Command> {
 
   private async _import(fileName: string): Promise<PossibleUndef<Command>> {
     const filePath = resolve(this._path, fileName);
-    const commandClass = await import(resolve(filePath)).then((m) => {
-      return m[parse(filePath).name];
-    });
+    const commandFile = await import(filePath);
+    const commandClass = commandFile[parse(filePath).name];
 
     return commandClass ? new commandClass(this._bot) : undefined;
   }
