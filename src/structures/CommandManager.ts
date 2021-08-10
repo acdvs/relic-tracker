@@ -22,14 +22,11 @@ export default class CommandManager extends Collection<string, Command> {
       );
     }
 
-    const commands = [];
     const files = await fs.readdir(this._path);
 
     for (const file of files) {
-      commands.push(await this._import(file));
-    }
+      const command = await this._import(file);
 
-    for (const command of commands) {
       if (!command) {
         continue;
       }
