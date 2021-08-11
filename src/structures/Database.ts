@@ -28,7 +28,7 @@ export default class Database {
     this._client.close();
   }
 
-  async getRelics(memberId: Snowflake): Promise<RelicCollection> {
+  async getCollectionById(memberId: Snowflake): Promise<RelicCollection> {
     const result = await this._collection!.findOne({
       memberId: memberId,
     });

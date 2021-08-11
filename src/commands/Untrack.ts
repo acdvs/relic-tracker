@@ -38,7 +38,9 @@ export class Untrack extends Command {
       return;
     }
 
-    const collection: RelicCollection = await this.bot.db.getRelics(author.id);
+    const collection: RelicCollection = await this.bot.db.getCollectionById(
+      author.id
+    );
 
     if (!collection.hasRelic(tierId, relicId)) {
       interaction.reply({

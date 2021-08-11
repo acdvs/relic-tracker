@@ -8,7 +8,9 @@ export class Relics extends Command {
 
   async execute(interaction: CommandInteraction): Promise<void> {
     const author = interaction.member as GuildMember;
-    const collection: RelicCollection = await this.bot.db.getRelics(author.id);
+    const collection: RelicCollection = await this.bot.db.getCollectionById(
+      author.id
+    );
 
     interaction.reply({
       embeds: [collection.generateEmbed('Your tracked relics')],
