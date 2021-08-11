@@ -24,7 +24,7 @@ export default class RelicCollection {
     return (
       tiers?.map((t, i) => new RelicTier(this, i + 1, t)) ||
       Array(...Array(RelicCollection.MAX_TIERS)).map(
-        (v) => new RelicTier(this, v, [])
+        (v, i) => new RelicTier(this, i + 1, [])
       )
     );
   }
