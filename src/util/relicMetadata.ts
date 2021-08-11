@@ -73,76 +73,94 @@ export default [
   ],
   [
     {
+      id: 1,
       name: 'Scroll',
-      image: '',
+      image: 'https://i.imgur.com/EL0pbfL.png',
     },
     {
+      id: 2,
       name: 'Snake',
-      image: '',
+      image: 'https://i.imgur.com/FD5wnxw.png',
     },
     {
+      id: 3,
       name: 'King',
-      image: '',
+      image: 'https://i.imgur.com/TaS3997.png',
     },
     {
+      id: 4,
       name: 'Crocodile',
-      image: '',
+      image: 'https://i.imgur.com/6Ha8zqw.png',
     },
     {
+      id: 5,
       name: 'Vase in Hands',
-      image: '',
+      image: 'https://i.imgur.com/IuTf8xi.png',
     },
     {
+      id: 6,
       name: 'Coin',
-      image: '',
+      image: 'https://i.imgur.com/m7kaIwA.png',
     },
     {
+      id: 7,
       name: 'Golden Skull',
-      image: '',
+      image: 'https://i.imgur.com/cONpyTX.png',
     },
     {
+      id: 8,
       name: 'Stuff in Bowl',
-      image: '',
+      image: 'https://i.imgur.com/ffc1FHB.png',
     },
     {
+      id: 9,
       name: 'Golden Pharaoh',
-      image: '',
+      image: 'https://i.imgur.com/huPNm45.png',
     },
     {
+      id: 10,
       name: 'Bonsai Tree',
-      image: '',
+      image: 'https://i.imgur.com/dwgC7HQ.png',
     },
   ],
   [
     {
+      id: 1,
       name: 'Fragile Box',
       image: '',
     },
     {
+      id: 2,
       name: 'Dragon',
       image: '',
     },
     {
+      id: 3,
       name: 'Shield',
       image: '',
     },
     {
+      id: 4,
       name: 'Panda',
       image: '',
     },
     {
+      id: 5,
       name: 'Hammer',
       image: '',
     },
     {
+      id: 6,
       name: 'Sword',
       image: '',
     },
     {
+      id: 7,
       name: 'Crystal Ball',
       image: '',
     },
     {
+      id: 8,
       name: 'Egg',
       image: '',
     },
