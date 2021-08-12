@@ -6,9 +6,9 @@ export default class Bot extends Client {
   private _commands = new CommandManager(this);
   public db = new Database(this);
 
-  start(token: string): void {
-    this.login(token);
-    this.db.connect();
+  async start(token: string): Promise<void> {
+    await this.db.connect();
+    await this.login(token);
 
     this.on('ready', this._onReady);
     this.on('interactionCreate', this._onInteractionCreate);
