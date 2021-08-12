@@ -38,6 +38,7 @@ export class Share extends Command {
     const tierId = interaction.options.getInteger('tier') as number;
     const relicId = interaction.options.getInteger('number') as number;
     const sharecode = interaction.options.getString('sharecode') as string;
+
     const amountInTier = getTierMetadata(tierId).length;
 
     if (!amountInTier || relicId < 1 || relicId > amountInTier) {

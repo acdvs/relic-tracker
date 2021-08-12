@@ -3,9 +3,8 @@ import {
   CommandInteraction,
   GuildMember,
 } from 'discord.js';
-import { UpdateResult } from 'mongodb';
 import { RelicCollection } from '../structures';
-import { Command, PossibleUndef } from '../types';
+import { Command } from '../types';
 import { DATABASE_ERROR, INVALID_RELIC } from '../util/sharedMessages';
 import { getTierMetadata } from '../util/relics';
 
@@ -29,10 +28,11 @@ export class Track extends Command {
   ];
 
   async execute(interaction: CommandInteraction): Promise<void> {
+    const author = interaction.member as GuildMember;
     const tierId = interaction.options.getInteger('tier') as number;
     const relicId = interaction.options.getInteger('number') as number;
+
     const amountInTier = getTierMetadata(tierId)?.length;
-    const author = interaction.member as GuildMember;
 
     if (!amountInTier || relicId < 1 || relicId > amountInTier) {
       interaction.reply({ embeds: [INVALID_RELIC], ephemeral: true });
@@ -55,19 +55,18 @@ export class Track extends Command {
       return;
     }
 
-    const result: PossibleUndef<UpdateResult> = await collection.addRelic(
-      tierId,
-      relicId
-    );
+    try {
+      await collection.addRelic(tierId, relicId);
 
-    if (result?.acknowledged) {
       interaction.reply({
         embeds: [
           collection.generateEmbed(`Tracking relic T${tierId}-${relicId}`),
         ],
         ephemeral: true,
       });
-    } else {
+    } catch (err) {
+      console.error(err, collection);
+
       interaction.reply({
         content: DATABASE_ERROR,
         ephemeral: true,

@@ -4,22 +4,30 @@ import { Bot, RelicCollection } from '.';
 import { PossibleUndef } from '../types';
 
 export default class Database {
-  private readonly _url = process.env.DB_URL;
   private _client: MongoClient;
   private _collection: PossibleUndef<Collection>;
 
-  constructor(public bot: Bot) {
-    this._client = new MongoClient(this._url!);
+  public bot: Bot;
+
+  constructor(bot: Bot) {
+    this._client = new MongoClient(process.env.MONGO_URL as string);
+    this.bot = bot;
   }
 
   async connect(): Promise<void> {
     try {
       await this._client.connect();
 
-      const database = this._client.db('relic_tracker');
-      this._collection = database.collection('relics');
+      const database = this._client.db(process.env.MONGO_DB as string);
+      this._collection = database.collection(
+        process.env.MONGO_COLLECTION as string
+      );
+
+      console.log(
+        `Connected to database ${process.env.MONGO_DB}, collection ${process.env.MONGO_COLLECTION}`
+      );
     } catch (e) {
-      console.error(e);
+      console.error('DATABASE_CONNECT_ERRROR:', e);
       process.exit(1);
     }
   }
@@ -61,6 +69,10 @@ export default class Database {
       { upsert: true }
     );
 
+    if (!result.acknowledged) {
+      throw new Error('SET_COLLECTION_ERROR');
+    }
+
     return result as UpdateResult;
   }
 
@@ -69,7 +81,7 @@ export default class Database {
     tierId: number,
     relicId: number
   ): Promise<void> {
-    await this._collection!.updateOne(
+    const result = await this._collection!.updateOne(
       { memberId },
       {
         $pull: {
@@ -79,5 +91,9 @@ export default class Database {
         },
       }
     );
+
+    if (!result.acknowledged) {
+      throw new Error('REMOVE_RELIC_ERROR');
+    }
   }
 }
