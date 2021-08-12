@@ -31,7 +31,7 @@ export class Track extends Command {
   async execute(interaction: CommandInteraction): Promise<void> {
     const tierId = interaction.options.getInteger('tier') as number;
     const relicId = interaction.options.getInteger('number') as number;
-    const amountInTier = getTierMetadata(tierId).length;
+    const amountInTier = getTierMetadata(tierId)?.length;
     const author = interaction.member as GuildMember;
 
     if (!amountInTier || relicId < 1 || relicId > amountInTier) {
