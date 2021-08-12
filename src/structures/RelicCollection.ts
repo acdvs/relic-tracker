@@ -64,7 +64,7 @@ export default class RelicCollection {
     return this.tiers[tierId - 1];
   }
 
-  generateEmbed(title: string): MessageEmbed {
+  generateEmbed(title: string, descriptionHeader?: string): MessageEmbed {
     const embed = new MessageEmbed({
       ...baseEmbedProps,
     });
@@ -75,7 +75,7 @@ export default class RelicCollection {
     }
 
     embed.setTitle(title);
-    const descriptionLines: string[] = [];
+    const descriptionLines = descriptionHeader ? [descriptionHeader] : [];
 
     for (const tier of this.tiers) {
       if (!tier.isEmpty()) {
