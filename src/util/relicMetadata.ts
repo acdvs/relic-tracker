@@ -109,7 +109,7 @@ export default [
     },
     {
       id: 8,
-      name: 'Stuff in Bowl',
+      name: 'Bowl of Rocks',
       image: 'https://i.imgur.com/ffc1FHB.png',
     },
     {
@@ -127,42 +127,42 @@ export default [
     {
       id: 1,
       name: 'Fragile Box',
-      image: '',
+      image: 'https://i.imgur.com/JSEROXA.png',
     },
     {
       id: 2,
       name: 'Dragon',
-      image: '',
+      image: 'https://i.imgur.com/PXtbbBv.png',
     },
     {
       id: 3,
       name: 'Shield',
-      image: '',
+      image: 'https://i.imgur.com/izDVvMT.png',
     },
     {
       id: 4,
       name: 'Panda',
-      image: '',
+      image: 'https://i.imgur.com/UDtmHnD.png',
     },
     {
       id: 5,
       name: 'Hammer',
-      image: '',
+      image: 'https://i.imgur.com/QVH8uka.png',
     },
     {
       id: 6,
       name: 'Sword',
-      image: '',
+      image: 'https://i.imgur.com/a7D9k8S.png',
     },
     {
       id: 7,
       name: 'Crystal Ball',
-      image: '',
+      image: 'https://i.imgur.com/2WwMkMe.png',
     },
     {
       id: 8,
       name: 'Egg',
-      image: '',
+      image: 'https://i.imgur.com/MYMuJGF.png',
     },
   ],
 ];
