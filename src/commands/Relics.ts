@@ -13,7 +13,13 @@ export class Relics extends Command {
     );
 
     interaction.reply({
-      embeds: [collection.generateEmbed('Your tracked relics')],
+      embeds: [
+        collection.generateEmbed({
+          title: 'Your tracked relics',
+          fallback: true,
+          fallbackDescription: 'None',
+        }),
+      ],
       ephemeral: true,
     });
   }

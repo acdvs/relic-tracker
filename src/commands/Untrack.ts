@@ -45,9 +45,10 @@ export class Untrack extends Command {
     if (!collection.hasRelic(tierId, relicId)) {
       interaction.reply({
         embeds: [
-          collection.generateEmbed(
-            `You are not tracking relic T${tierId}-${relicId} yet.`
-          ),
+          collection.generateEmbed({
+            title: `You are not tracking relic T${tierId}-${relicId} yet`,
+            fallback: false,
+          }),
         ],
         ephemeral: true,
       });
@@ -59,9 +60,10 @@ export class Untrack extends Command {
 
       interaction.reply({
         embeds: [
-          collection.generateEmbed(
-            `No longer tracking relic T${tierId}-${relicId}`
-          ),
+          collection.generateEmbed({
+            title: `No longer tracking relic T${tierId}-${relicId}`,
+            fallback: false,
+          }),
         ],
         ephemeral: true,
       });

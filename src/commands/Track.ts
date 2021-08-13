@@ -46,9 +46,9 @@ export class Track extends Command {
     if (collection.hasRelic(tierId, relicId)) {
       interaction.reply({
         embeds: [
-          collection.generateEmbed(
-            `You are already tracking relic T${tierId}-${relicId}.`
-          ),
+          collection.generateEmbed({
+            title: `You are already tracking relic T${tierId}-${relicId}`,
+          }),
         ],
         ephemeral: true,
       });
@@ -60,7 +60,9 @@ export class Track extends Command {
 
       interaction.reply({
         embeds: [
-          collection.generateEmbed(`Tracking relic T${tierId}-${relicId}`),
+          collection.generateEmbed({
+            title: `Tracking relic T${tierId}-${relicId}`,
+          }),
         ],
         ephemeral: true,
       });

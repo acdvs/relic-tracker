@@ -1,6 +1,6 @@
 import { UpdateResult } from 'mongodb';
 import { MessageEmbed, Snowflake } from 'discord.js';
-import { PossibleUndef, RawCollectionData } from '../types';
+import { EmbedOptions, PossibleUndef, RawCollectionData } from '../types';
 import { Bot, RelicTier } from '.';
 import baseEmbedProps from '../util/baseEmbedProps';
 
@@ -64,18 +64,23 @@ export default class RelicCollection {
     return this.tiers[tierId - 1];
   }
 
-  generateEmbed(title: string, descriptionHeader?: string): MessageEmbed {
+  generateEmbed(opts: EmbedOptions): MessageEmbed {
     const embed = new MessageEmbed({
       ...baseEmbedProps,
     });
 
-    if (this.isEmpty()) {
-      embed.setDescription('You are not tracking any relics yet.');
+    embed.setTitle(opts.title);
+
+    if (this.isEmpty() && opts.fallback) {
+      embed.setDescription(
+        opts.fallbackDescription || 'You are not tracking any relics.'
+      );
       return embed;
     }
 
-    embed.setTitle(title);
-    const descriptionLines = descriptionHeader ? [descriptionHeader] : [];
+    const descriptionLines = opts.descriptionHeader
+      ? [opts.descriptionHeader]
+      : [];
 
     for (const tier of this.tiers) {
       if (!tier.isEmpty()) {
