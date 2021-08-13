@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs';
 import { resolve, parse } from 'path';
-import { Collection, CommandInteraction, Guild } from 'discord.js';
+import { Collection, CommandInteraction } from 'discord.js';
 import { Command, PossibleUndef } from '../types';
 import { Bot } from '.';
 
@@ -14,15 +14,8 @@ export default class CommandManager extends Collection<string, Command> {
   }
 
   async load(): Promise<void> {
-    let testGuild: PossibleUndef<Guild>;
-
-    if (process.env.MODE === 'development') {
-      testGuild = await this._bot.guilds.fetch(
-        process.env.TEST_SERVER_ID as string
-      );
-    }
-
     const files = await fs.readdir(this._path);
+    const guilds = this._bot.guilds.cache.values();
 
     for (const file of files) {
       const command = await this._import(file);
@@ -33,10 +26,8 @@ export default class CommandManager extends Collection<string, Command> {
 
       this.set(command.name, command);
 
-      if (testGuild) {
-        await testGuild.commands.create(command);
-      } else {
-        await this._bot.application?.commands.create(command);
+      for (const guild of guilds) {
+        await guild.commands.create(command);
       }
 
       console.log(`Loaded command /${command.name}`);
