@@ -83,14 +83,11 @@ export default class RelicCollection {
       : [];
 
     for (const tier of this.tiers) {
-      if (!tier.isEmpty()) {
-        descriptionLines.push(
-          `**Tier ${tier.id}:** ${tier.getFormattedList({
-            separator: ' ',
-            code: true,
-          })}`
-        );
-      }
+      descriptionLines.push(
+        `**Tier ${tier.id}:** ${
+          tier.getFormattedList({ separator: ', ' }) || 'None'
+        }`
+      );
     }
 
     embed.setDescription(descriptionLines.join('\n'));

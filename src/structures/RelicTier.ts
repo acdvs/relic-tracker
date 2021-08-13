@@ -34,12 +34,7 @@ export default class RelicTier {
       return '';
     }
 
-    return this.relics
-      .map((r) => {
-        const relicStr = `T${r.tier.id}-${r.id}`;
-        return opts.code ? `\`${relicStr}\`` : relicStr;
-      })
-      .join(opts.separator);
+    return this.relics.map((r) => r.id).join(opts.separator);
   }
 
   serialize(): RawTierData {

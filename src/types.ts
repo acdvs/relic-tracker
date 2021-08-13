@@ -24,7 +24,6 @@ export type EmbedOptions = {
 
 export type TierFormattedListOptions = {
   separator: string;
-  code: boolean;
 };
 
 export type RelicMetadata = {
